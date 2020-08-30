@@ -23,8 +23,9 @@ void sfml_wall::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 
-sfml_wall::sfml_wall(float width, sf::Color color)
-    : m_width(width)
+sfml_wall::sfml_wall(math::vec2 begin_point, math::vec2 end_point, float width, sf::Color color)
+    : wall(begin_point, end_point)
+    , m_width(width)
 {
     set_color(color);
     m_line_view.setOutlineThickness(0);

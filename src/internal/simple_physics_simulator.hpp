@@ -22,5 +22,4 @@ namespace bullet_manager
 
         std::vector<std::unique_ptr<wall>>& m_walls_list;
     };
-}
-
+} // namespace bullet_manager

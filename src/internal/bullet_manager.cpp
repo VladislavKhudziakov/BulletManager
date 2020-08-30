@@ -22,6 +22,7 @@ void bullet_manager::bullet_manager::update(float time)
     std::lock_guard lock(m_storage_mutex);
 
     std::vector<decltype(m_bullets_storage)::iterator> expired_bullets;
+    expired_bullets.reserve(10);
 
     for (auto begin = m_bullets_storage.begin(); begin != m_bullets_storage.end(); begin++) {
         if (begin->get()->time_spawn + begin->get()->life_time < time) {

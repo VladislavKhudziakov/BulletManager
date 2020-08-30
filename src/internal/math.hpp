@@ -33,4 +33,4 @@ namespace bullet_manager::math
     {
         return v1.x * v2.x + v1.y * v2.y;
     }
-} // namespace bullet_manager
+} // namespace bullet_manager::math

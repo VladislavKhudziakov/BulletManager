@@ -22,11 +22,10 @@ namespace bullet_manager
 
         virtual ~bullet() = default;
 
-        math::vec2 pos {0, 0};
-        math::vec2 dir {0, 0};
-        float speed {0};
-        float time_spawn {0};
-        float life_time {0};
+        math::vec2 pos{0, 0};
+        math::vec2 dir{0, 0};
+        float speed{0};
+        float time_spawn{0};
+        float life_time{0};
     };
-}
-
+} // namespace bullet_manager

@@ -12,11 +12,13 @@ namespace bullet_manager::sfml
     class sfml_wall : public wall, public sfml_renderable
     {
     public:
-        explicit sfml_wall(float width, sf::Color color = sf::Color::Black);
-        ~sfml_wall() override
-        {
+        explicit sfml_wall(
+            math::vec2 begin_point,
+            math::vec2 end_point,
+            float width,
+            sf::Color color = sf::Color::Black);
 
-        };
+        ~sfml_wall() override = default;
 
         float get_width() const;
         void set_width(float);
@@ -30,4 +32,4 @@ namespace bullet_manager::sfml
 
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     };
-} // namespace bullet_manager
+} // namespace bullet_manager::sfml

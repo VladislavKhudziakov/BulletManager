@@ -13,4 +13,4 @@ namespace bullet_manager::interfaces
         virtual ~renderer() = default;
         virtual void draw(renderable*) = 0;
     };
-} // namespace src::interfaces
+} // namespace bullet_manager::interfaces
