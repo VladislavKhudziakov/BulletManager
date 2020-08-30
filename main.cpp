@@ -4,7 +4,9 @@
 #include <internal/sfml/sfml_circle_bullet.hpp>
 #include <internal/sfml/sfml_wall.hpp>
 #include <internal/bullet_manager.hpp>
-#include <internal/concurrent_bullets_storage.hpp>
+#include <internal/dummy_physics_simulator.hpp>
+
+#include <thread>
 
 
 int main()
@@ -18,37 +20,59 @@ int main()
         sf::Style::Default,
         settings);
 
-    bullet_manager::sfml_circle_bullet bullet(5);
-    bullet_manager::bullet_manager<bullet_manager::bullet_sptr> bm(
-        bullet_manager::concurrent_bullets_storage<bullet_manager::bullet_sptr>::create(), nullptr);
+    std::atomic_bool is_window_open = true;
+
+    bullet_manager::sfml_circle_bullet bullet({400, 300}, {0, 0}, 0, 0, 0, 5);
+
+    bullet_manager::sfml_renderer renderer(window);
+    bullet_manager::dummy_physics_simulator simulator{};
+
+    bullet_manager::bullet_manager bm(&simulator, &renderer);
 
     bullet_manager::sfml_wall wall(3);
     wall.begin_point = {0, 0};
     wall.end_point = {100, 100};
+    sf::Clock clock;
 
-    bullet.pos = {400, 300};
+    std::vector<std::thread> work_threads;
+    const auto available_threads = std::thread::hardware_concurrency() - 1;
 
-    bullet_manager::sfml_renderer renderer(window);
+    work_threads.reserve(available_threads);
 
-    // run the program as long as the window is open
+    for (size_t i = 0; i < available_threads; ++i) {
+        work_threads.emplace_back([&bm, &clock, &window, &is_window_open]() {
+            while (is_window_open) {
+                auto sleep_time = rand() % 1000;
+                std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
+                auto sz = window.getSize();
+                bm.fire<bullet_manager::sfml_circle_bullet>(
+                    bullet_manager::misc::vec2 {float(rand() % uint32_t(sz.x)), float(rand() % uint32_t(sz.y))},
+                    bullet_manager::misc::vec2 {float(rand() % uint32_t(sz.x)), float(rand() % uint32_t(sz.y))},
+                    0, clock.getElapsedTime().asSeconds(), 1, 3);
+            }
+        });
+    }
+
     while (window.isOpen()) {
-        // check all the window's events that were triggered since the last
-        // iteration of the loop
         sf::Event event;
         while (window.pollEvent(event)) {
-            // "close requested" event: we close the window
             if (event.type == sf::Event::Closed)
                 window.close();
+                break;
         }
 
-        // clear the window with black color
         window.clear(sf::Color::White);
 
-        renderer.draw(bullet);
-        renderer.draw(wall);
+        bm.update(clock.getElapsedTime().asSeconds());
 
-        // end the current frame
         window.display();
+    }
+
+    is_window_open = false;
+
+
+    for (auto& t : work_threads) {
+        t.join();
     }
 
     return 0;

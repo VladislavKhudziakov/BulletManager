@@ -6,7 +6,7 @@
 
 using namespace bullet_manager;
 
-void sfml_renderable::draw(interfaces::renderer& renderer)
+void sfml_renderable::draw(interfaces::renderer* renderer)
 {
-    renderer.draw(*this);
+    renderer->draw(this);
 }

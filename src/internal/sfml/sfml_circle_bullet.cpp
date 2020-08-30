@@ -5,8 +5,10 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 
 
-bullet_manager::sfml_circle_bullet::sfml_circle_bullet(float radius, sf::Color color)
-: m_circle(radius)
+bullet_manager::sfml_circle_bullet::sfml_circle_bullet(
+    misc::vec2 pos, misc::vec2 dir, float speed, float time_spawn, float life_time, float radius, sf::Color color)
+    : bullet(pos, dir, speed, time_spawn, life_time)
+    , m_circle(radius)
 {
     set_color(color);
     m_circle.setOrigin(sf::Vector2f(radius, radius));

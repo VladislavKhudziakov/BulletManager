@@ -11,7 +11,7 @@ bullet_manager::sfml_renderer::sfml_renderer(sf::RenderTarget& rt)
 {
 }
 
-void bullet_manager::sfml_renderer::draw(interfaces::renderable& renderable)
+void bullet_manager::sfml_renderer::draw(interfaces::renderable* renderable)
 {
-    m_render_target.draw(static_cast<sfml_renderable&>(renderable));
+    m_render_target.draw(*static_cast<sfml_renderable*>(renderable));
 }

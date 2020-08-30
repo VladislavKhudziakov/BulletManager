@@ -13,7 +13,15 @@ namespace bullet_manager
     class sfml_circle_bullet : public bullet, public sfml_renderable
     {
     public:
-        explicit sfml_circle_bullet(float radius, sf::Color color = sf::Color::Black);
+        explicit sfml_circle_bullet(
+            misc::vec2 pos,
+            misc::vec2 dir,
+            float speed,
+            float time_spawn,
+            float life_time,
+            float radius,
+            sf::Color color = sf::Color::Black);
+
         ~sfml_circle_bullet() override = default;
 
         float get_radius() const;

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <interfaces/renderable.hpp>
 #include <internal/misc.hpp>
 
 #include <memory>
@@ -17,10 +18,7 @@ namespace bullet_manager
     class bullet
     {
     public:
-        static bullet_sptr create()
-        {
-            return std::make_shared<bullet>();
-        }
+        bullet(misc::vec2, misc::vec2, float, float, float);
 
         virtual ~bullet() = default;
 

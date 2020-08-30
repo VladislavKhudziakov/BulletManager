@@ -5,6 +5,7 @@
 #include <interfaces/renderer.hpp>
 
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <internal/sfml/sfml_renderable.hpp>
 
 namespace bullet_manager
 {
@@ -13,7 +14,7 @@ namespace bullet_manager
     public:
         explicit sfml_renderer(sf::RenderTarget&);
         ~sfml_renderer() override = default;
-        void draw(bullet_manager::interfaces::renderable& renderable) override;
+        void draw(bullet_manager::interfaces::renderable* renderable) override;
 
     private:
         sf::RenderTarget& m_render_target;

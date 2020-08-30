@@ -15,6 +15,6 @@ namespace bullet_manager
 
     public:
         ~sfml_renderable() override = default;
-        void draw(interfaces::renderer& renderer) override;
+        void draw(interfaces::renderer* renderer) override;
     };
 } // namespace bullet_manager
