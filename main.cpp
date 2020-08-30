@@ -5,10 +5,39 @@
 #include <internal/sfml/sfml_wall.hpp>
 #include <internal/bullet_manager.hpp>
 #include <internal/simple_physics_simulator.hpp>
-#include <interfaces/renderable.hpp>
 
 #include <thread>
 
+bullet_manager::math::vec2 walls_positions[][2] {
+    {
+        bullet_manager::math::vec2{50, 50},
+        bullet_manager::math::vec2{50, 550},
+    },
+    {
+        bullet_manager::math::vec2{50, 550},
+        bullet_manager::math::vec2{750, 550},
+    },
+    {
+        bullet_manager::math::vec2{750, 550},
+        bullet_manager::math::vec2{750, 50},
+    },
+    {
+        bullet_manager::math::vec2 {750, 50},
+        bullet_manager::math::vec2{50, 50},
+    },
+    {
+        bullet_manager::math::vec2 {150, 450},
+        bullet_manager::math::vec2{400, 100},
+    },
+    {
+        bullet_manager::math::vec2 {400, 100},
+        bullet_manager::math::vec2{650, 450},
+    },
+    {
+        bullet_manager::math::vec2 {650, 450},
+        bullet_manager::math::vec2{150, 450},
+    }
+};
 
 int main()
 {
@@ -24,44 +53,21 @@ int main()
     std::atomic_bool is_window_open = true;
 
     std::vector<std::unique_ptr<bullet_manager::wall>> walls {};
+    walls.reserve(std::size(walls_positions));
 
-    for (size_t i = 0; i < 10; ++i) {
-        walls.emplace_back(std::make_unique<bullet_manager::sfml::sfml_wall>(3));
+    for (const auto& pos : walls_positions) {
+        walls.emplace_back(std::make_unique<bullet_manager::sfml::sfml_wall>(pos[0], pos[1], 3));
     }
-
-    walls[0]->begin_point = {50, 50};
-    walls[0]->end_point = {50, 550};
-
-    walls[1]->begin_point = {50, 550};
-    walls[1]->end_point = {750, 550};
-
-    walls[2]->begin_point = {750, 550};
-    walls[2]->end_point = {750, 50};
-
-    walls[3]->begin_point = {750, 50};
-    walls[3]->end_point = {50, 50};
-
-    walls[4]->begin_point = {150, 450};
-    walls[4]->end_point = {400, 100};
-
-    walls[5]->begin_point = {400, 100};
-    walls[5]->end_point = {650, 450};
-
-    walls[6]->begin_point = {650, 450};
-    walls[6]->end_point = {150, 450};
 
     bullet_manager::sfml_renderer renderer(window);
     bullet_manager::simple_physics_simulator simulator{walls};
 
     ::bullet_manager::bullet_manager bm(&simulator, &renderer);
 
-    bullet_manager::sfml::sfml_wall wall(3);
-    wall.begin_point = {0, 0};
-    wall.end_point = {100, 100};
     sf::Clock clock;
 
     std::vector<std::thread> work_threads;
-    const auto available_threads = std::thread::hardware_concurrency() - 1;
+    const auto available_threads = std::thread::hardware_concurrency() - 2;
 
     work_threads.reserve(available_threads);
 
@@ -81,7 +87,7 @@ int main()
                 }
 
                 timer = curr_time_stamp;
-                sleep_time = rand() % 10000;
+                sleep_time = rand() % 5000;
 
                 auto sz = window.getView().getSize();
                 auto dir = bullet_manager::math::normalize({float(rand() % uint32_t(sz.x)), float(rand() % uint32_t(sz.y))});
@@ -109,11 +115,13 @@ int main()
 
         bm.update(clock.getElapsedTime().asSeconds());
 
-        for (auto& wall : walls) {
-            if (auto renderable_wall = dynamic_cast<bullet_manager::interfaces::renderable*>(wall.get())) {
-                renderer.draw(renderable_wall);
+        simulator.visit_walls_list([&renderer](auto begin, auto end) {
+            for (; begin != end; ++begin) {
+                if (auto renderable_wall = dynamic_cast<bullet_manager::interfaces::renderable*>(begin->get())) {
+                    renderer.draw(renderable_wall);
+                }
             }
-        }
+        });
 
         window.display();
     }
