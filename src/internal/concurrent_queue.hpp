@@ -32,7 +32,7 @@ namespace bullet_manager
         {
             std::lock_guard lock(m_mutex);
 
-            if(m_storage.empty()) {
+            if (m_storage.empty()) {
                 throw std::runtime_error("queue is empty.");
             }
 
@@ -49,7 +49,7 @@ namespace bullet_manager
             }
 
             m_cv.wait(lock, [this]() {
-               return !m_storage.empty();
+                return !m_storage.empty();
             });
 
             assign_and_pop(ref);
@@ -66,5 +66,4 @@ namespace bullet_manager
         std::condition_variable m_cv;
         std::deque<T> m_storage;
     };
-}
-
+} // namespace bullet_manager
