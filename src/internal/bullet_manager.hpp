@@ -7,10 +7,11 @@
 #include <interfaces/renderable.hpp>
 
 #include <internal/bullet.hpp>
-#include <internal/misc.hpp>
+#include <internal/math.hpp>
 
-#include <chrono>
 #include <type_traits>
+#include <deque>
+#include <mutex>
 
 
 namespace bullet_manager

@@ -3,7 +3,7 @@
 #pragma once
 
 #include <interfaces/renderable.hpp>
-#include <internal/misc.hpp>
+#include <internal/math.hpp>
 
 #include <memory>
 
@@ -18,12 +18,12 @@ namespace bullet_manager
     class bullet
     {
     public:
-        bullet(misc::vec2, misc::vec2, float, float, float);
+        bullet(math::vec2, math::vec2, float, float, float);
 
         virtual ~bullet() = default;
 
-        misc::vec2 pos {0, 0};
-        misc::vec2 dir {0, 0};
+        math::vec2 pos {0, 0};
+        math::vec2 dir {0, 0};
         float speed {0};
         float time_spawn {0};
         float life_time {0};

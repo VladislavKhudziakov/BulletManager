@@ -7,13 +7,16 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-namespace bullet_manager
+namespace bullet_manager::sfml
 {
     class sfml_wall : public wall, public sfml_renderable
     {
     public:
         explicit sfml_wall(float width, sf::Color color = sf::Color::Black);
-        ~sfml_wall() override = default;
+        ~sfml_wall() override
+        {
+
+        };
 
         float get_width() const;
         void set_width(float);

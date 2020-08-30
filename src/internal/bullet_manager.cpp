@@ -2,6 +2,8 @@
 
 #include "bullet_manager.hpp"
 
+#include <vector>
+
 
 bullet_manager::bullet_manager::bullet_manager(
     ::bullet_manager::interfaces::bullets_physics_simulator* simulator,
@@ -19,16 +21,22 @@ void bullet_manager::bullet_manager::update(float time)
 
     std::lock_guard lock(m_storage_mutex);
 
+    std::vector<decltype(m_bullets_storage)::iterator> expired_bullets;
+
     for (auto begin = m_bullets_storage.begin(); begin != m_bullets_storage.end(); begin++) {
         if (begin->get()->time_spawn + begin->get()->life_time < time) {
-            m_bullets_storage.erase(begin);
+            expired_bullets.emplace_back(begin);
             continue;
         }
 
         m_physics_simulator->process_bullet(delta, begin->get());
 
-        if (auto* renderable_bullet = dynamic_cast<interfaces::renderable*>(begin->get()); renderable_bullet != nullptr) {
+        if (auto* renderable_bullet = dynamic_cast<interfaces::renderable*>(begin->get())) {
             m_renderer->draw(renderable_bullet);
         }
+    }
+
+    for (const auto bullet : expired_bullets) {
+        m_bullets_storage.erase(bullet);
     }
 }

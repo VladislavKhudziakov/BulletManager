@@ -14,8 +14,8 @@ namespace bullet_manager
     {
     public:
         explicit sfml_circle_bullet(
-            misc::vec2 pos,
-            misc::vec2 dir,
+            math::vec2 pos,
+            math::vec2 dir,
             float speed,
             float time_spawn,
             float life_time,

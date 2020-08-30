@@ -4,7 +4,7 @@
 
 using namespace bullet_manager;
 
-bullet::bullet(misc::vec2 pos, misc::vec2 dir, float speed, float time_spawn, float life_time)
+bullet::bullet(math::vec2 pos, math::vec2 dir, float speed, float time_spawn, float life_time)
     : pos(pos)
     , dir(dir)
     , speed(speed)

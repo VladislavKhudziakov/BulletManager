@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <internal/misc.hpp>
+#include <internal/math.hpp>
 
 namespace bullet_manager
 {
@@ -10,7 +10,7 @@ namespace bullet_manager
     public:
         virtual ~wall() = default;
 
-        misc::vec2 begin_point;
-        misc::vec2 end_point;
+        math::vec2 begin_point;
+        math::vec2 end_point;
     };
 } // namespace bullet_manager
