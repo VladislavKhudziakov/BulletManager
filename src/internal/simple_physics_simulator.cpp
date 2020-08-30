@@ -62,21 +62,15 @@ math::vec2 bullet_manager::simple_physics_simulator::calculate_bullet_reflection
     const auto v = math::normalize(wall->end_point - wall->begin_point);
 
     const auto ortho_ccw = math::ortho(v);
-    const auto ortho_cw = math::ortho(v, false);
 
-    float angle_ccw = math::dot(ortho_ccw, dir);
-
-    float angle_cw = math::dot(ortho_cw, dir);
+    float angle_ccw = math::dot(dir, ortho_ccw);
 
     if (angle_ccw >= 0 && angle_ccw <= M_PI) {
-        return dir - 2 * math::dot(dir, ortho_ccw) * ortho_ccw;
-    }
-
-    if (angle_cw >= 0 && angle_cw <= M_PI) {
+        return dir - 2 * angle_ccw * ortho_ccw;
+    } else {
+        const auto ortho_cw = math::ortho(v, false);
         return dir - 2 * math::dot(dir, ortho_cw) * ortho_cw;
     }
-
-    assert(false);
 }
 
 
