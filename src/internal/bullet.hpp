@@ -3,7 +3,7 @@
 #pragma once
 
 #include <interfaces/renderable.hpp>
-#include <internal/math.hpp>
+#include <internal/misc/math.hpp>
 
 #include <memory>
 

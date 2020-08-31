@@ -3,7 +3,7 @@
 #pragma once
 
 #include <interfaces/renderer.hpp>
-#include <internal/concurrent_queue.hpp>
+#include <internal/misc/concurrent_queue.hpp>
 
 #include <deque>
 #include <thread>

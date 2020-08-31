@@ -3,8 +3,8 @@
 #include "simple_physics_simulator.hpp"
 
 #include <internal/bullet.hpp>
-#include <internal/math.hpp>
-#include <internal/walls_manager.hpp>
+#include <internal/misc/math.hpp>
+#include <internal/misc/walls_manager.hpp>
 
 using namespace bullet_manager;
 

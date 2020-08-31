@@ -4,8 +4,8 @@
 #include <internal/sfml/sfml_circle_bullet.hpp>
 #include <internal/sfml/sfml_wall.hpp>
 #include <internal/bullet_manager.hpp>
-#include <internal/simple_physics_simulator.hpp>
-#include <internal/walls_manager.hpp>
+#include <internal/misc/simple_physics_simulator.hpp>
+#include <internal/misc/walls_manager.hpp>
 
 #include <thread>
 

@@ -7,7 +7,7 @@
 #include <interfaces/renderable.hpp>
 
 #include <internal/bullet.hpp>
-#include <internal/math.hpp>
+#include <internal/misc/math.hpp>
 
 #include <deque>
 #include <mutex>

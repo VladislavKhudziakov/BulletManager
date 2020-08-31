@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <internal/math.hpp>
+#include <internal/misc/math.hpp>
 
 namespace bullet_manager
 {
