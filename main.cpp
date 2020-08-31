@@ -41,7 +41,6 @@ bullet_manager::math::vec2 walls_positions[][2]{
 
 int main()
 {
-    // create the window
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
     sf::RenderWindow window(
