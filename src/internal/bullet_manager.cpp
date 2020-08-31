@@ -25,6 +25,10 @@ void bullet_manager::bullet_manager::update(float time)
     expired_bullets.reserve(10);
 
     for (auto begin = m_bullets_storage.begin(); begin != m_bullets_storage.end(); begin++) {
+        if (begin->get()->time_spawn > time) {
+            continue;
+        }
+
         if (begin->get()->time_spawn + begin->get()->life_time < time) {
             expired_bullets.emplace_back(begin);
             continue;

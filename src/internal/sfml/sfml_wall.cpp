@@ -3,7 +3,6 @@
 #include "sfml_wall.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <cmath>
 
 
 using namespace bullet_manager::sfml;

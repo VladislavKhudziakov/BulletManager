@@ -9,7 +9,6 @@
 #include <internal/bullet.hpp>
 #include <internal/math.hpp>
 
-#include <type_traits>
 #include <deque>
 #include <mutex>
 
@@ -25,11 +24,7 @@ namespace bullet_manager
 
         void update(float time);
 
-        template<
-            typename CreatedBulletType,
-            typename... Args,
-            // to avoid terrible templates messages
-            typename = std::enable_if_t<std::is_base_of_v<bullet, CreatedBulletType>>>
+        template<typename CreatedBulletType, typename... Args>
         void fire(Args&&... args)
         {
             std::lock_guard lock(m_storage_mutex);

@@ -5,39 +5,39 @@
 #include <internal/sfml/sfml_wall.hpp>
 #include <internal/bullet_manager.hpp>
 #include <internal/simple_physics_simulator.hpp>
+#include <internal/walls_manager.hpp>
 
 #include <thread>
 
-bullet_manager::math::vec2 walls_positions[][2] {
+bullet_manager::math::vec2 walls_positions[][2]{
     {
-        bullet_manager::math::vec2{50, 50},
-        bullet_manager::math::vec2{50, 550},
+        {50, 50},
+        {50, 550},
     },
     {
-        bullet_manager::math::vec2{50, 550},
-        bullet_manager::math::vec2{750, 550},
+        {50, 550},
+        {750, 550},
     },
     {
-        bullet_manager::math::vec2{750, 550},
-        bullet_manager::math::vec2{750, 50},
+        {750, 550},
+        {750, 50},
     },
     {
-        bullet_manager::math::vec2 {750, 50},
-        bullet_manager::math::vec2{50, 50},
+        {750, 50},
+        {50, 50},
     },
     {
-        bullet_manager::math::vec2 {150, 450},
-        bullet_manager::math::vec2{400, 100},
+        {150, 450},
+        {400, 100},
     },
     {
-        bullet_manager::math::vec2 {400, 100},
-        bullet_manager::math::vec2{650, 450},
+        {400, 100},
+        {650, 450},
     },
     {
-        bullet_manager::math::vec2 {650, 450},
-        bullet_manager::math::vec2{150, 450},
-    }
-};
+        {650, 450},
+        {150, 450},
+    }};
 
 int main()
 {
@@ -52,17 +52,16 @@ int main()
 
     std::atomic_bool is_window_open = true;
 
-    std::vector<std::unique_ptr<bullet_manager::wall>> walls {};
-    walls.reserve(std::size(walls_positions));
+    bullet_manager::sfml_renderer renderer(window);
+    bullet_manager::walls_manager walls_manager(&renderer);
 
     for (const auto& pos : walls_positions) {
-        walls.emplace_back(std::make_unique<bullet_manager::sfml::sfml_wall>(pos[0], pos[1], 3));
+        walls_manager.add_wall<bullet_manager::sfml::sfml_wall>(pos[0], pos[1], 3);
     }
 
-    bullet_manager::sfml_renderer renderer(window);
-    bullet_manager::simple_physics_simulator simulator{walls};
+    bullet_manager::simple_physics_simulator simulator{&walls_manager};
 
-    ::bullet_manager::bullet_manager bm(&simulator, &renderer);
+    bullet_manager::bullet_manager bm(&simulator, &renderer);
 
     sf::Clock clock;
 
@@ -91,7 +90,7 @@ int main()
 
                 auto sz = window.getView().getSize();
                 auto dir = bullet_manager::math::normalize({float(rand() % uint32_t(sz.x)), float(rand() % uint32_t(sz.y))});
-                dir = dir * 2.f - bullet_manager::math::vec2 {1.f, 1.f};
+                dir = dir * 2.f - bullet_manager::math::vec2{1.f, 1.f};
                 bm.fire<bullet_manager::sfml_circle_bullet>(
                     bullet_manager::math::vec2{float(rand() % uint32_t(sz.x)), float(rand() % uint32_t(sz.y))},
                     bullet_manager::math::vec2{dir},
@@ -114,14 +113,7 @@ int main()
         window.clear(sf::Color::White);
 
         bm.update(clock.getElapsedTime().asSeconds());
-
-        simulator.visit_walls_list([&renderer](auto begin, auto end) {
-            for (; begin != end; ++begin) {
-                if (auto renderable_wall = dynamic_cast<bullet_manager::interfaces::renderable*>(begin->get())) {
-                    renderer.draw(renderable_wall);
-                }
-            }
-        });
+        walls_manager.update();
 
         window.display();
     }
